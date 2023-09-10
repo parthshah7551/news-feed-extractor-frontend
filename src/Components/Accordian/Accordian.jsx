@@ -1,100 +1,137 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import Accordion from "react-bootstrap/Accordion";
+import { accordianData } from "../../Constants/accordianData";
+import { Button } from "react-bootstrap";
+import { keywordData } from "../../Constants/keywordData";
 
-function Accordian() {
+function AccordionComponent({
+  isShowAllKeywords,
+  isSaveAllToggle,
+  isEditAllToggle,
+}) {
+  const [activeKey, setActiveKey] = useState([]);
+  const [editArray, setEditArray] = useState([]);
+
+  useEffect(() => {
+    setActiveKey(
+      isShowAllKeywords > 0 ? accordianData.map((_, index) => index) : []
+    );
+  }, [isShowAllKeywords]);
+
+  useEffect(() => {
+    setActiveKey(accordianData.map((_, index) => index));
+    setEditArray(accordianData.map((_, index) => index));
+  }, [isEditAllToggle]);
+
+  useEffect(() => {
+    setActiveKey([]);
+    setEditArray([]);
+  }, [isSaveAllToggle]);
+
+  const openAccordionFunction = (index) => {
+    const elemIndex = activeKey.indexOf(index);
+    if (elemIndex > -1) {
+      activeKey.splice(elemIndex, 1);
+      setActiveKey([...activeKey]);
+    } else {
+      setActiveKey([...activeKey, index]);
+    }
+  };
+  const editButtonFunction = (index) => {
+    setEditArray([...editArray, index]);
+  };
+  const onSaveButtonFunction = (index) => {
+    const elemIndex = editArray.indexOf(index);
+    if (elemIndex > -1) editArray.splice(elemIndex, 1);
+    setEditArray([...editArray]);
+  };
+
   return (
-    <div class="accordion p-4" id="accordionPanelsStayOpenExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-          <button
-            class="accordion-button"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseOne"
-            aria-expanded="true"
-            aria-controls="panelsStayOpen-collapseOne"
-          >
-            Accordion Item #1
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseOne"
-          class="accordion-collapse collapse show"
-          aria-labelledby="panelsStayOpen-headingOne"
-        >
-          <div class="accordion-body">
-            <strong>This is the first item's accordion body.</strong> It is
-            shown by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseTwo"
-            aria-expanded="false"
-            aria-controls="panelsStayOpen-collapseTwo"
-          >
-            Accordion Item #2
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseTwo"
-          class="accordion-collapse collapse"
-          aria-labelledby="panelsStayOpen-headingTwo"
-        >
-          <div class="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseThree"
-            aria-expanded="false"
-            aria-controls="panelsStayOpen-collapseThree"
-          >
-            Accordion Item #3
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseThree"
-          class="accordion-collapse collapse"
-          aria-labelledby="panelsStayOpen-headingThree"
-        >
-          <div class="accordion-body">
-            <strong>This is the third item's accordion body.</strong> It is
-            hidden by default, until the collapse plugin adds the appropriate
-            classes that we use to style each element. These classes control the
-            overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or
-            overriding our default variables. It's also worth noting that just
-            about any HTML can go within the <code>.accordion-body</code>,
-            though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-    </div>
+    <Accordion className="m-3" activeKey={activeKey} alwaysOpen>
+      {accordianData.map((item, index) => {
+        return (
+          <Accordion.Item eventKey={index} key={index}>
+            <Accordion.Header onClick={() => openAccordionFunction(index)}>
+              <div className="d-flex justify-content-between align-items-center w-100">
+                <div className="d-flex align-items-center">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id={`inlineCheckbox1${index}`}
+                      value={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    />
+                  </div>
+                  <div className="mt-1">{item.title}</div>
+                </div>
+                {editArray.includes(index) ? (
+                  <div>
+                    <Button
+                      variant="outline-success"
+                      className="ms-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSaveButtonFunction(index);
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      className="ms-2 me-4"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSaveButtonFunction(index);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline-primary"
+                    className="ms-2 me-4"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editButtonFunction(index);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                )}
+              </div>
+            </Accordion.Header>
+            <Accordion.Body>
+              {keywordData.map((keywordItem, keyWordIndex) => {
+                console.log("keywordItem: ", keywordItem);
+                return (
+                  <div class="form-check form-check-inline" key={keyWordIndex}>
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id={`inlineCheckbox1${keyWordIndex}`}
+                      value={keyWordIndex}
+                      disabled={!editArray.includes(index)}
+                      defaultChecked={keywordItem.isChecked}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1">
+                      {keywordItem.keyword}
+                    </label>
+                  </div>
+                );
+              })}
+            </Accordion.Body>
+          </Accordion.Item>
+        );
+      })}
+    </Accordion>
   );
 }
 
-export default Accordian;
+export default AccordionComponent;
