@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import { accordianData } from "../../Constants/accordianData";
 import { Button } from "react-bootstrap";
-import { keywordData } from "../../Constants/keywordData";
+import axios from "axios";
+import { BASEURL } from "../../Constants/constant";
 
 function AccordionComponent({
   isShowAllKeywords,
@@ -11,6 +12,16 @@ function AccordionComponent({
 }) {
   const [activeKey, setActiveKey] = useState([]);
   const [editArray, setEditArray] = useState([]);
+  const [urlKeywordsData, setUrlKeywordsData] = useState([]);
+
+  const urlKeywordsDataFunction = async () => {
+    const urlKeywordsDetails = await axios.get(`${BASEURL}/urlKeywordsDetails`);
+    if (urlKeywordsDetails.status === 200) {
+      setUrlKeywordsData(urlKeywordsDetails.data);
+    } else {
+      setUrlKeywordsData([]);
+    }
+  };
 
   useEffect(() => {
     setActiveKey(
@@ -27,6 +38,10 @@ function AccordionComponent({
     setActiveKey([]);
     setEditArray([]);
   }, [isSaveAllToggle]);
+
+  useEffect(() => {
+    urlKeywordsDataFunction();
+  }, []);
 
   const openAccordionFunction = (index) => {
     const elemIndex = activeKey.indexOf(index);
@@ -48,7 +63,7 @@ function AccordionComponent({
 
   return (
     <Accordion className="m-3" activeKey={activeKey} alwaysOpen>
-      {accordianData.map((item, index) => {
+      {Object.keys(urlKeywordsData).map((urlItem, index) => {
         return (
           <Accordion.Item eventKey={index} key={index}>
             <Accordion.Header onClick={() => openAccordionFunction(index)}>
@@ -60,12 +75,13 @@ function AccordionComponent({
                       type="checkbox"
                       id={`inlineCheckbox1${index}`}
                       value={index}
+                      checked={urlKeywordsData[urlItem]?.isChecked}
                       onClick={(e) => {
                         e.stopPropagation();
                       }}
                     />
                   </div>
-                  <div className="mt-1">{item.title}</div>
+                  <div className="mt-1">{urlItem}</div>
                 </div>
                 {editArray.includes(index) ? (
                   <div>
@@ -105,27 +121,33 @@ function AccordionComponent({
               </div>
             </Accordion.Header>
             <Accordion.Body>
-              {keywordData.map((keywordItem, keyWordIndex) => {
-                console.log("keywordItem: ", keywordItem);
-                return (
-                  <div class="form-check form-check-inline" key={keyWordIndex}>
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id={`inlineCheckbox1${keyWordIndex}`}
-                      value={keyWordIndex}
-                      disabled={!editArray.includes(index)}
-                      defaultChecked={keywordItem.isChecked}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    />
-                    <label class="form-check-label" for="inlineCheckbox1">
-                      {keywordItem.keyword}
-                    </label>
-                  </div>
-                );
-              })}
+              {Object.keys(urlKeywordsData[urlItem]?.keywords).map(
+                (keywordItem, keyWordIndex) => {
+                  return (
+                    <div
+                      class="form-check form-check-inline"
+                      key={keyWordIndex}
+                    >
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id={`inlineCheckbox1${keyWordIndex}`}
+                        value={keyWordIndex}
+                        disabled={!editArray.includes(index)}
+                        defaultChecked={
+                          urlKeywordsData[urlItem]?.keywords[keywordItem]
+                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      />
+                      <label class="form-check-label" for="inlineCheckbox1">
+                        {keywordItem}
+                      </label>
+                    </div>
+                  );
+                }
+              )}
             </Accordion.Body>
           </Accordion.Item>
         );
