@@ -2,11 +2,11 @@ import React from "react";
 
 function AddURL() {
   return (
-    <form class="form-inline d-flex align-items-center flex-wrap m-2">
-      <div class="form-group">
+    <form className="form-inline d-flex align-items-center flex-wrap m-2">
+      <div className="form-group">
         <input
           type="text"
-          class="form-control"
+          className="form-control"
           id="addURLtext"
           placeholder="Enter the URL"
         />
