@@ -3,7 +3,7 @@ import { BASEURL } from "../../../Constants/constant";
 import axios from "axios";
 
 function AddKeywordComponent() {
-  const [keywordText, setURLText] = useState("");
+  const [keywordText, setKeywordText] = useState("");
 
   const addKeywordFunction = async () => {
     console.log("keywordText: ", keywordText);
@@ -11,7 +11,7 @@ function AddKeywordComponent() {
       [keywordText]: true,
     };
     await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
-    setURLText("");
+    setKeywordText("");
   };
   return (
     <form className="form-inline d-flex align-items-center flex-wrap  m-2">
@@ -21,7 +21,8 @@ function AddKeywordComponent() {
           className="form-control"
           id="addKeywordtext"
           placeholder="Enter the Keyword"
-          onChange={(e) => setURLText(e.target.value.trim())}
+          value={keywordText}
+          onChange={(e) => setKeywordText(e.target.value.trim())}
         />
       </div>
       <button
