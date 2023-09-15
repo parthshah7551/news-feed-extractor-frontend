@@ -34,6 +34,10 @@ function AccordionComponent({
       }
     };
 
+    const onDeleteButtonFunction = async (url) => {
+      await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
+    };
+
     useEffect(() => {
       setActiveKey(
         isShowAllKeywords > 0 ? accordianData.map((_, index) => index) : []
@@ -109,9 +113,9 @@ function AccordionComponent({
                       <Button
                         variant="outline-danger"
                         className="ms-2 me-4"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
-                          onSaveButtonFunction(index);
+                          await onDeleteButtonFunction(urlItem);
                         }}
                       >
                         Delete
