@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { BASEURL } from "../../../Constants/constant";
 import axios from "axios";
 
-function AddURL() {
+function AddURL({ isDataAddedFunction }) {
   const [inputURLText, setInputURLText] = useState("");
   const addURLFunction = async () => {
-    console.log("inputURLText: ", inputURLText);
     await axios.post(`${BASEURL}/addURL`, { url: inputURLText });
     setInputURLText("");
+    await isDataAddedFunction();
   };
   return (
     <form className="form-inline d-flex align-items-center flex-wrap m-2">
