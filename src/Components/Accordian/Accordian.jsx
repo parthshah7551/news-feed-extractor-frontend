@@ -13,14 +13,15 @@ function AccordionComponent({
 }) {
   const [activeKey, setActiveKey] = useState([]);
   const [editArray, setEditArray] = useState([]);
-  const [urlKeywordsData, setUrlKeywordsData] = useState([]);
+  const [urlKeywordsData, setUrlKeywordsData] = useState({});
+  const [isDataChange, setIsDataChange] = useState(false);
 
   const urlKeywordsDataFunction = async () => {
     const urlKeywordsDetails = await axios.get(`${BASEURL}/urlKeywordsDetails`);
-    if (urlKeywordsDetails.status === 200) {
+    if (urlKeywordsDetails.status === 200 && urlKeywordsDetails?.data) {
       setUrlKeywordsData(urlKeywordsDetails.data);
     } else {
-      setUrlKeywordsData([]);
+      setUrlKeywordsData({});
     }
   };
 
@@ -37,6 +38,7 @@ function AccordionComponent({
 
   const onDeleteButtonFunction = async (url) => {
     await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
+    setIsDataChange(!isDataChange);
   };
 
   useEffect(() => {
@@ -57,7 +59,7 @@ function AccordionComponent({
 
   useEffect(() => {
     urlKeywordsDataFunction();
-  }, [isDataAdded]);
+  }, [isDataAdded, isDataChange]);
 
   const openAccordionFunction = (index) => {
     const elemIndex = activeKey.indexOf(index);
@@ -116,7 +118,9 @@ function AccordionComponent({
                       className="ms-2 me-4"
                       onClick={async (e) => {
                         e.stopPropagation();
-                        await onDeleteButtonFunction(urlItem);
+                        if (window.confirm("Are you sure?")) {
+                          await onDeleteButtonFunction(urlItem);
+                        }
                       }}
                     >
                       Delete
