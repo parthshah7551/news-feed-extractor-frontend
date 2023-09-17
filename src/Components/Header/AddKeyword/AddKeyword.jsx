@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { BASEURL } from "../../../Constants/constant";
 import axios from "axios";
 
-function AddKeywordComponent() {
+function AddKeywordComponent({ isDataAddedFunction }) {
   const [keywordText, setKeywordText] = useState("");
 
   const addKeywordFunction = async () => {
-    console.log("keywordText: ", keywordText);
     const newKeyWordsData = {
       [keywordText]: true,
     };
     await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
     setKeywordText("");
+    await isDataAddedFunction();
   };
   return (
     <form className="form-inline d-flex align-items-center flex-wrap  m-2">
