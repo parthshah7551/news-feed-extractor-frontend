@@ -93,51 +93,82 @@ function AccordionComponent({
                       type="checkbox"
                       id={`inlineCheckbox1${index}`}
                       value={index}
+                      disabled={!editArray.includes(index)}
                       defaultChecked={urlKeywordsData[urlItem]?.isChecked}
                       onClick={(e) => {
                         e.stopPropagation();
                       }}
                     />
                   </div>
-                  <div className="mt-1">{urlItem}</div>
+                  <div>{urlItem}</div>
                 </div>
-                {editArray.includes(index) ? (
-                  <div>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-between align-items-center me-4">
+                    <div className="ms-4">
+                      <input
+                        type="date"
+                        disabled={!editArray.includes(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <span className="mx-3">To</span>
+                    <div>
+                      <input
+                        type="date"
+                        disabled={!editArray.includes(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {editArray.includes(index) ? (
+                    <div>
+                      <Button
+                        variant="outline-success"
+                        className="ms-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSaveButtonFunction(index);
+                        }}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="outline-danger"
+                        className="ms-2 me-4"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (window.confirm("Are you sure?")) {
+                            await onDeleteButtonFunction(urlItem);
+                          }
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  ) : (
                     <Button
-                      variant="outline-success"
-                      className="ms-2"
+                      variant="outline-primary"
+                      className="ms-2 me-4"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onSaveButtonFunction(index);
+                        editButtonFunction(index);
                       }}
                     >
-                      Save
+                      Edit
                     </Button>
-                    <Button
-                      variant="outline-danger"
-                      className="ms-2 me-4"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if (window.confirm("Are you sure?")) {
-                          await onDeleteButtonFunction(urlItem);
-                        }
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    variant="outline-primary"
-                    className="ms-2 me-4"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      editButtonFunction(index);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                )}
+                  )}
+                </div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
