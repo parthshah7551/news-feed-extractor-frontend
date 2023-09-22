@@ -15,6 +15,7 @@ function AccordionComponent({
   const [editArray, setEditArray] = useState([]);
   const [urlKeywordsData, setUrlKeywordsData] = useState({});
   const [isDataChange, setIsDataChange] = useState(false);
+  const [editedData, setEditedData] = useState({});
 
   const urlKeywordsDataFunction = async () => {
     const urlKeywordsDetails = await axios.get(`${BASEURL}/urlKeywordsDetails`);
@@ -22,17 +23,6 @@ function AccordionComponent({
       setUrlKeywordsData(urlKeywordsDetails.data);
     } else {
       setUrlKeywordsData({});
-    }
-  };
-
-  const getMasterKeywordsDataFunction = async () => {
-    const urlKeywordsDetails = await axios.get(
-      `${BASEURL}/masterKeywordsDetails`
-    );
-    if (urlKeywordsDetails.status === 200) {
-      setUrlKeywordsData(urlKeywordsDetails.data);
-    } else {
-      setUrlKeywordsData([]);
     }
   };
 
@@ -73,10 +63,57 @@ function AccordionComponent({
   const editButtonFunction = (index) => {
     setEditArray([...editArray, index]);
   };
-  const onSaveButtonFunction = (index) => {
-    const elemIndex = editArray.indexOf(index);
-    if (elemIndex > -1) editArray.splice(elemIndex, 1);
-    setEditArray([...editArray]);
+  const onSaveButtonFunction = async (index, urlItem) => {
+    try {
+      await axios.put(`${BASEURL}/editURL`, {
+        [urlItem]: editedData[urlItem],
+      });
+      const elemIndex = editArray.indexOf(index);
+      if (elemIndex > -1) editArray.splice(elemIndex, 1);
+      setEditArray([...editArray]);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const editURLFunction = (urlName, keywordsData, isChecked) => {
+    try {
+      setEditedData({
+        ...editedData,
+        [urlName]: {
+          isChecked,
+          keywords: editedData[urlName]
+            ? editedData[urlName].keywords
+            : keywordsData[urlName].keywords,
+        },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const editKeywordsFunction = (
+    urlName,
+    keywordsData,
+    keywordName,
+    isChecked
+  ) => {
+    try {
+      const updatedKeywords = editedData[urlName]
+        ? { ...editedData[urlName].keywords, [keywordName]: isChecked }
+        : { ...keywordsData[urlName].keywords, [keywordName]: isChecked };
+      setEditedData({
+        ...editedData,
+        [urlName]: {
+          isChecked: editedData[urlName]
+            ? editedData[urlName].isChecked
+            : keywordsData[urlName].isChecked,
+          keywords: updatedKeywords,
+        },
+      });
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
@@ -95,8 +132,13 @@ function AccordionComponent({
                       value={index}
                       disabled={!editArray.includes(index)}
                       defaultChecked={urlKeywordsData[urlItem]?.isChecked}
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.stopPropagation();
+                        await editURLFunction(
+                          urlItem,
+                          urlKeywordsData,
+                          e.target.checked
+                        );
                       }}
                     />
                   </div>
@@ -138,7 +180,7 @@ function AccordionComponent({
                         className="ms-2"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSaveButtonFunction(index);
+                          onSaveButtonFunction(index, urlItem);
                         }}
                       >
                         Save
@@ -188,8 +230,14 @@ function AccordionComponent({
                         defaultChecked={
                           urlKeywordsData[urlItem]?.keywords[keywordItem]
                         }
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
+                          await editKeywordsFunction(
+                            urlItem,
+                            urlKeywordsData,
+                            keywordItem,
+                            e.target.checked
+                          );
                         }}
                       />
                       <label
