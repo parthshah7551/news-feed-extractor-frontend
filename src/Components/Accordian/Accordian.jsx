@@ -31,6 +31,14 @@ function AccordionComponent({
     setIsDataChange(!isDataChange);
   };
 
+  const saveAllDataFunction = async () => {
+    try {
+      await axios.put(`${BASEURL}/editURL`, editedData);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   useEffect(() => {
     setActiveKey(
       isShowAllKeywords > 0 ? accordianData.map((_, index) => index) : []
@@ -45,6 +53,7 @@ function AccordionComponent({
   useEffect(() => {
     setActiveKey([]);
     setEditArray([]);
+    saveAllDataFunction();
   }, [isSaveAllToggle]);
 
   useEffect(() => {
