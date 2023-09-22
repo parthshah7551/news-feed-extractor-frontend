@@ -21,14 +21,21 @@ function Header({
           className="m-2"
           onClick={() => showAllKeywordsFunction(true)}
         >
-          Show keywords for all url
+          Show all keywords
         </Button>
         <Button
           variant="outline-secondary"
           className=" m-2"
           onClick={() => showAllKeywordsFunction(false)}
         >
-          Hide keywords for all url
+          Hide all keywords
+        </Button>
+        <Button
+          variant="outline-primary"
+          className="m-2"
+          onClick={() => saveAllFunction()}
+        >
+          Select All
         </Button>
         <Button
           variant="outline-primary"
