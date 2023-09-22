@@ -4,6 +4,7 @@ import { accordianData } from "../../Constants/accordianData";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { BASEURL } from "../../Constants/constant";
+import moment from "moment";
 
 function AccordionComponent({
   isShowAllKeywords,
@@ -139,7 +140,6 @@ function AccordionComponent({
                       type="checkbox"
                       id={`inlineCheckbox1${index}`}
                       value={index}
-                      disabled={!editArray.includes(index)}
                       defaultChecked={urlKeywordsData[urlItem]?.isChecked}
                       onClick={async (e) => {
                         e.stopPropagation();
@@ -158,10 +158,11 @@ function AccordionComponent({
                     <div className="ms-4">
                       <input
                         type="date"
-                        disabled={!editArray.includes(index)}
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
+                        defaultValue={moment().format("YYYY-MM-DD")}
+                        max={moment().format("YYYY-MM-DD")}
                         onChange={(e) => {
                           console.log(e.target.value);
                         }}
@@ -171,7 +172,8 @@ function AccordionComponent({
                     <div>
                       <input
                         type="date"
-                        disabled={!editArray.includes(index)}
+                        defaultValue={moment().format("YYYY-MM-DD")}
+                        max={moment().format("YYYY-MM-DD")}
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
