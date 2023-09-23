@@ -2,8 +2,11 @@ import React from "react";
 import AddURLComponent from "./AddURL/AddURL";
 import AddKeywordComponent from "./AddKeyword/AddKeyword";
 import { Button } from "react-bootstrap";
+import { useAppContext } from "../../../AppContext";
 
-function Header({ showAllKeywordsFunction, saveAllFunction, editAllFunction }) {
+function Header({ showAllKeywordsFunction, editAllFunction }) {
+  const { isSaveAllBtn, setIsSaveAllBtn } = useAppContext();
+  console.log("setIsSaveAllBtn: ", setIsSaveAllBtn);
   return (
     <div className="d-flex justify-content-between flex-wrap mt-2 m-3">
       <div className="d-flex flex-wrap">
@@ -14,7 +17,7 @@ function Header({ showAllKeywordsFunction, saveAllFunction, editAllFunction }) {
         <Button
           variant="outline-success"
           className="m-2"
-          onClick={() => saveAllFunction()}
+          onClick={() => setIsSaveAllBtn(isSaveAllBtn + 1)}
           style={{ width: "5.5rem" }}
         >
           Start
@@ -43,7 +46,7 @@ function Header({ showAllKeywordsFunction, saveAllFunction, editAllFunction }) {
         <Button
           variant="outline-success"
           className="m-2"
-          onClick={() => saveAllFunction()}
+          onClick={() => setIsSaveAllBtn(isSaveAllBtn + 1)}
         >
           Save All
         </Button>

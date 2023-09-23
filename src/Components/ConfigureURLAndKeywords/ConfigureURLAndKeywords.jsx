@@ -4,11 +4,7 @@ import AccordionComponent from "./Accordian/Accordian";
 
 const ConfigureURLAndKeywords = () => {
   const [isShowAllKeywords, setIsShow] = useState(0);
-  const [isSaveAllToggle, setIsSaveAllToggle] = useState(false);
   const [isEditAllToggle, setIsEditAllToggle] = useState(false);
-  const saveAllFunction = () => {
-    setIsSaveAllToggle(!isSaveAllToggle);
-  };
 
   const editAllFunction = () => {
     setIsEditAllToggle(!isEditAllToggle);
@@ -25,12 +21,10 @@ const ConfigureURLAndKeywords = () => {
     <>
       <Header
         showAllKeywordsFunction={showAllKeywordsFunction}
-        saveAllFunction={saveAllFunction}
         editAllFunction={editAllFunction}
       />
       <AccordionComponent
         isShowAllKeywords={isShowAllKeywords}
-        isSaveAllToggle={isSaveAllToggle}
         isEditAllToggle={isEditAllToggle}
       />
     </>

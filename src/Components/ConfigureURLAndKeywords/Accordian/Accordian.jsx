@@ -7,18 +7,13 @@ import { BASEURL } from "../../../Constants/constant";
 import moment from "moment";
 import { useAppContext } from "../../../AppContext";
 
-function AccordionComponent({
-  isShowAllKeywords,
-  isSaveAllToggle,
-  isEditAllToggle,
-}) {
+function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const [activeKey, setActiveKey] = useState([]);
   const [editArray, setEditArray] = useState([]);
   const [urlKeywordsData, setUrlKeywordsData] = useState({});
   const [isDataChange, setIsDataChange] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const { isDataChanged } = useAppContext();
-  console.log("isDataChanged: ", isDataChanged);
+  const { isDataChanged, isSaveAllBtn } = useAppContext();
 
   const urlKeywordsDataFunction = async () => {
     try {
@@ -44,6 +39,14 @@ function AccordionComponent({
     }
   };
 
+  const saveAllDataFunction = async () => {
+    try {
+      await axios.put(`${BASEURL}/editURL`, editedData);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   useEffect(() => {
     setActiveKey(
       isShowAllKeywords > 0 ? accordianData.map((_, index) => index) : []
@@ -58,7 +61,10 @@ function AccordionComponent({
   useEffect(() => {
     setActiveKey([]);
     setEditArray([]);
-  }, [isSaveAllToggle]);
+    if (isSaveAllBtn > 0) {
+      saveAllDataFunction();
+    }
+  }, [isSaveAllBtn]);
 
   useEffect(() => {
     urlKeywordsDataFunction();

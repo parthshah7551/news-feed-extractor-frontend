@@ -4,9 +4,12 @@ const AppContext = createContext();
 
 export function AppProvider({ children }) {
   const [isDataChanged, setIsDataChanged] = useState(false);
+  const [isSaveAllBtn, setIsSaveAllBtn] = useState(0);
 
   return (
-    <AppContext.Provider value={{ isDataChanged, setIsDataChanged }}>
+    <AppContext.Provider
+      value={{ isDataChanged, isSaveAllBtn, setIsDataChanged, setIsSaveAllBtn }}
+    >
       {children}
     </AppContext.Provider>
   );
