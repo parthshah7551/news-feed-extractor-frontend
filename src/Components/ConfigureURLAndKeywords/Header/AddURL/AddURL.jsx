@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { BASEURL } from "../../../../Constants/constant";
 import axios from "axios";
+import { useAppContext } from "../../../../AppContext";
 
-function AddURL({ isDataAddedFunction }) {
+function AddURL() {
   const [inputURLText, setInputURLText] = useState("");
+  const { isDataChanged, setIsDataChanged } = useAppContext();
+
   const addURLFunction = async () => {
     try {
       await axios.post(`${BASEURL}/addURL`, { url: inputURLText });
       setInputURLText("");
-      await isDataAddedFunction();
+      setIsDataChanged(!isDataChanged);
     } catch (error) {
       console.log("error: ", error);
     }
