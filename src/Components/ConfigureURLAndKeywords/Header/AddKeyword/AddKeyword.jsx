@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { BASEURL } from "../../../../Constants/constant";
 import axios from "axios";
+import { useAppContext } from "../../../../AppContext";
 
-function AddKeywordComponent({ isDataAddedFunction }) {
+function AddKeywordComponent() {
+  const { isDataChanged, setIsDataChanged } = useAppContext();
   const [keywordText, setKeywordText] = useState("");
 
   const addKeywordFunction = async () => {
@@ -12,7 +14,7 @@ function AddKeywordComponent({ isDataAddedFunction }) {
       };
       await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
       setKeywordText("");
-      isDataAddedFunction();
+      setIsDataChanged(!isDataChanged);
     } catch (error) {
       console.log("error: ", error);
     }

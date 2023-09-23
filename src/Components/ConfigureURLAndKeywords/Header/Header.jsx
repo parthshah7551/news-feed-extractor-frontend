@@ -3,17 +3,12 @@ import AddURLComponent from "./AddURL/AddURL";
 import AddKeywordComponent from "./AddKeyword/AddKeyword";
 import { Button } from "react-bootstrap";
 
-function Header({
-  showAllKeywordsFunction,
-  saveAllFunction,
-  editAllFunction,
-  isDataAddedFunction,
-}) {
+function Header({ showAllKeywordsFunction, saveAllFunction, editAllFunction }) {
   return (
     <div className="d-flex justify-content-between flex-wrap mt-2 m-3">
       <div className="d-flex flex-wrap">
-        <AddURLComponent isDataAddedFunction={isDataAddedFunction} />
-        <AddKeywordComponent isDataAddedFunction={isDataAddedFunction} />
+        <AddURLComponent />
+        <AddKeywordComponent />
       </div>
       <div>
         <Button
