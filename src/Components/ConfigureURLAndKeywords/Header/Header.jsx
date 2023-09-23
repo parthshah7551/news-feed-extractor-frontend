@@ -17,6 +17,14 @@ function Header({
       </div>
       <div>
         <Button
+          variant="outline-success"
+          className="m-2"
+          onClick={() => saveAllFunction()}
+          style={{ width: "5.5rem" }}
+        >
+          Start
+        </Button>
+        <Button
           variant="outline-info"
           className="m-2"
           onClick={() => showAllKeywordsFunction(true)}
@@ -29,13 +37,6 @@ function Header({
           onClick={() => showAllKeywordsFunction(false)}
         >
           Hide all keywords
-        </Button>
-        <Button
-          variant="outline-primary"
-          className="m-2"
-          onClick={() => saveAllFunction()}
-        >
-          Select All
         </Button>
         <Button
           variant="outline-primary"

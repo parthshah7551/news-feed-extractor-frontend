@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BASEURL } from "../../../Constants/constant";
+import { BASEURL } from "../../../../Constants/constant";
 import axios from "axios";
 
 function AddKeywordComponent({ isDataAddedFunction }) {
