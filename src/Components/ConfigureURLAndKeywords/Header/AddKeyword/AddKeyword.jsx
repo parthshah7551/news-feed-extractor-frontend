@@ -6,12 +6,16 @@ function AddKeywordComponent({ isDataAddedFunction }) {
   const [keywordText, setKeywordText] = useState("");
 
   const addKeywordFunction = async () => {
-    const newKeyWordsData = {
-      [keywordText]: true,
-    };
-    await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
-    setKeywordText("");
-    await isDataAddedFunction();
+    try {
+      const newKeyWordsData = {
+        [keywordText]: true,
+      };
+      await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
+      setKeywordText("");
+      isDataAddedFunction();
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
   return (
     <form className="form-inline d-flex align-items-center flex-wrap  m-2">

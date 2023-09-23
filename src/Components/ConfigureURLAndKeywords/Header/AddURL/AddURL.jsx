@@ -5,9 +5,13 @@ import axios from "axios";
 function AddURL({ isDataAddedFunction }) {
   const [inputURLText, setInputURLText] = useState("");
   const addURLFunction = async () => {
-    await axios.post(`${BASEURL}/addURL`, { url: inputURLText });
-    setInputURLText("");
-    await isDataAddedFunction();
+    try {
+      await axios.post(`${BASEURL}/addURL`, { url: inputURLText });
+      setInputURLText("");
+      await isDataAddedFunction();
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
   return (
     <form className="form-inline d-flex align-items-center flex-wrap m-2">
