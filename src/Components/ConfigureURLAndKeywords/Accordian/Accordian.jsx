@@ -19,17 +19,27 @@ function AccordionComponent({
   const [editedData, setEditedData] = useState({});
 
   const urlKeywordsDataFunction = async () => {
-    const urlKeywordsDetails = await axios.get(`${BASEURL}/urlKeywordsDetails`);
-    if (urlKeywordsDetails.status === 200 && urlKeywordsDetails?.data) {
-      setUrlKeywordsData(urlKeywordsDetails.data);
-    } else {
-      setUrlKeywordsData({});
+    try {
+      const urlKeywordsDetails = await axios.get(
+        `${BASEURL}/urlKeywordsDetails`
+      );
+      if (urlKeywordsDetails.status === 200 && urlKeywordsDetails?.data) {
+        setUrlKeywordsData(urlKeywordsDetails.data);
+      } else {
+        setUrlKeywordsData({});
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
   const onDeleteButtonFunction = async (url) => {
-    await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
-    setIsDataChange(!isDataChange);
+    try {
+      await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
+      setIsDataChange(!isDataChange);
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const saveAllDataFunction = async () => {
@@ -54,12 +64,11 @@ function AccordionComponent({
   useEffect(() => {
     setActiveKey([]);
     setEditArray([]);
-    saveAllDataFunction();
   }, [isSaveAllToggle]);
 
   useEffect(() => {
     urlKeywordsDataFunction();
-  }, [isDataAdded, isDataChange]);
+  }, []);
 
   const openAccordionFunction = (index) => {
     const elemIndex = activeKey.indexOf(index);
