@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
-import { accordianData } from "../../Constants/accordianData";
+import { accordianData } from "../../../Constants/accordianData";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { BASEURL } from "../../Constants/constant";
+import { BASEURL } from "../../../Constants/constant";
 import moment from "moment";
 
 function AccordionComponent({

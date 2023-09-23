@@ -1,29 +1,33 @@
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import ConfigureURLAndKeywords from "../ConfigureURLAndKeywords/ConfigureURLAndKeywords";
 
 function NavbarComponent() {
   return (
     <>
-      <Navbar className="d-flex justify-content-between align-items-center navbarBackGroundColour">
-        <div>
-          <Navbar.Brand href="#home" className="textColourWhite ms-4">
-            New Feed Extractor
-          </Navbar.Brand>
-        </div>
-        <div>
-          <Nav className="me-3">
-            <Nav.Link href="#home" className="textColourWhite">
-              Home
-            </Nav.Link>
-            <Nav.Link href="#configure" className="textColourWhite">
-              configure URLs and Keywords
-            </Nav.Link>
-            <Nav.Link href="#logs" className="textColourWhite">
-              Logs
-            </Nav.Link>
-          </Nav>
-        </div>
-      </Navbar>
+      <Router>
+        <nav className="d-flex justify-content-between align-items-center navbarBackGroundColour">
+          <div className="textColourWhite m-3">NEWS Feed Extractor</div>
+          <ul className="d-flex m-3">
+            <li className="me-3">
+              <Link to="/" className="text-decoration-none textColourWhite">
+                Configure URL & Keywords
+              </Link>
+            </li>
+            <li className="me-3">
+              <Link to="/logs" className="text-decoration-none textColourWhite">
+                Logs
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<ConfigureURLAndKeywords />} />
+        </Routes>
+      </Router>
     </>
   );
 }
