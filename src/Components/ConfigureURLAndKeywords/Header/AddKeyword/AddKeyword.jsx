@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BASEURL } from "../../../../Constants/constant";
 import axios from "axios";
 import { useAppContext } from "../../../../AppContext";
+import { toast } from "react-toastify";
 
 function AddKeywordComponent() {
   const { isDataChanged, setIsDataChanged } = useAppContext();
@@ -38,6 +39,7 @@ function AddKeywordComponent() {
         onClick={async (e) => {
           e.preventDefault();
           await addKeywordFunction();
+          toast.success("Keyword Added successfully!");
         }}
       >
         Add Keyword

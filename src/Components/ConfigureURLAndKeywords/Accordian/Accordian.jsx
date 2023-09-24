@@ -36,6 +36,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -44,6 +45,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
       setIsDataChange(!isDataChange);
     } catch (error) {
+      toast.error("Something went wrong!");
       console.log("error: ", error);
     }
   };
@@ -51,9 +53,10 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const saveAllDataFunction = async () => {
     try {
       await axios.put(`${BASEURL}/editURL`, editedData);
-      toast.success("Data is saved successfully!");
+      toast.success("Settings updated successfully!");
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -89,7 +92,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
 
   useEffect(() => {
     urlKeywordsDataFunction();
-  }, [isDataChanged]);
+  }, [isDataChange, isDataChanged]);
 
   const openAccordionFunction = (index) => {
     const elemIndex = activeKey.indexOf(index);
@@ -113,6 +116,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       setEditArray([...editArray]);
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -129,6 +133,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       });
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -153,6 +158,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       });
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -169,6 +175,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -236,9 +243,10 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                       <Button
                         variant="outline-success"
                         className="ms-2"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
-                          onSaveButtonFunction(index, urlItem);
+                          await onSaveButtonFunction(index, urlItem);
+                          toast.success("Checklist Saved successfully!");
                         }}
                       >
                         Save
@@ -250,6 +258,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                           e.stopPropagation();
                           if (window.confirm("Are you sure?")) {
                             await onDeleteButtonFunction(urlItem);
+                            toast.success("URL Deleted successfully!");
                           }
                         }}
                       >
