@@ -6,6 +6,7 @@ import axios from "axios";
 import { BASEURL } from "../../../Constants/constant";
 import moment from "moment";
 import { useAppContext } from "../../../AppContext";
+import { toast } from "react-toastify";
 
 function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const [activeKey, setActiveKey] = useState([]);
@@ -50,6 +51,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const saveAllDataFunction = async () => {
     try {
       await axios.put(`${BASEURL}/editURL`, editedData);
+      toast.success("Data is saved successfully!");
     } catch (error) {
       console.log("error: ", error);
     }
