@@ -13,7 +13,8 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const [urlKeywordsData, setUrlKeywordsData] = useState({});
   const [isDataChange, setIsDataChange] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const { isDataChanged, isSaveAllBtn } = useAppContext();
+  const { isDataChanged, isSaveAllBtn, isSelectAllBtn } = useAppContext();
+  const [checkedURL, setCheckedURL] = useState([]);
 
   const urlKeywordsDataFunction = async () => {
     try {
@@ -21,7 +22,14 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
         `${BASEURL}/urlKeywordsDetails`
       );
       if (urlKeywordsDetails.status === 200 && urlKeywordsDetails?.data) {
-        setUrlKeywordsData(urlKeywordsDetails.data);
+        setUrlKeywordsData(urlKeywordsDetails?.data);
+        let tempArray = [];
+        Object.keys(urlKeywordsDetails?.data)?.forEach((item) => {
+          if (urlKeywordsDetails?.data[item]?.isChecked) {
+            tempArray = [...tempArray, item];
+          }
+        });
+        setCheckedURL(tempArray);
       } else {
         setUrlKeywordsData({});
       }
@@ -57,6 +65,17 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
     setActiveKey(accordianData.map((_, index) => index));
     setEditArray(accordianData.map((_, index) => index));
   }, [isEditAllToggle]);
+
+  useEffect(() => {
+    if (isSelectAllBtn > 0) {
+      setCheckedURL(Object.keys(urlKeywordsData));
+      Object.keys(urlKeywordsData).forEach((item) => {
+        urlKeywordsData[item].isChecked = true;
+      });
+      console.log("urlKeywordsData: ", urlKeywordsData);
+      setEditedData(urlKeywordsData);
+    }
+  }, [isSelectAllBtn]);
 
   useEffect(() => {
     setActiveKey([]);
@@ -135,9 +154,26 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
     }
   };
 
+  const handleClick = (urlItem) => {
+    try {
+      if (!checkedURL.includes(urlItem)) {
+        setCheckedURL([...checkedURL, urlItem]);
+      } else {
+        const elemIndex = checkedURL.indexOf(urlItem);
+        if (elemIndex > -1) {
+          checkedURL.splice(elemIndex, 1);
+          setCheckedURL([...checkedURL]);
+        }
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <Accordion className="m-3" activeKey={activeKey} alwaysOpen>
       {Object.keys(urlKeywordsData).map((urlItem, index) => {
+        console.log("checkedURL: ", checkedURL);
         return (
           <Accordion.Item eventKey={index} key={index}>
             <Accordion.Header onClick={() => openAccordionFunction(index)}>
@@ -147,16 +183,16 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      id={`inlineCheckbox1${index}`}
-                      value={index}
-                      defaultChecked={urlKeywordsData[urlItem]?.isChecked}
+                      id={`${index}`}
+                      checked={checkedURL.includes(urlItem)}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        await editURLFunction(
+                        editURLFunction(
                           urlItem,
                           urlKeywordsData,
                           e.target.checked
                         );
+                        handleClick(urlItem);
                       }}
                     />
                   </div>

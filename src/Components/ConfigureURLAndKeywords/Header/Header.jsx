@@ -5,12 +5,12 @@ import { Button } from "react-bootstrap";
 import { useAppContext } from "../../../AppContext";
 
 function Header({ showAllKeywordsFunction, editAllFunction }) {
-  const { isSaveAllBtn, setIsSaveAllBtn } = useAppContext();
-  console.log("setIsSaveAllBtn: ", setIsSaveAllBtn);
+  const { isSaveAllBtn, setIsSaveAllBtn, isSelectAllBtn, setIsSelectAllBtn } =
+    useAppContext();
   return (
     <div className="d-flex justify-content-between flex-wrap mt-2 m-3">
       <div className="d-flex flex-wrap">
-        <AddURLComponent />
+        {/* <AddURLComponent /> */}
         <AddKeywordComponent />
       </div>
       <div>
@@ -35,6 +35,13 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
           onClick={() => showAllKeywordsFunction(false)}
         >
           Hide all keywords
+        </Button>
+        <Button
+          variant="outline-primary"
+          className="m-2"
+          onClick={() => setIsSelectAllBtn(isSelectAllBtn + 1)}
+        >
+          Select All
         </Button>
         <Button
           variant="outline-primary"
