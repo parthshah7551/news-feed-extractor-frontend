@@ -17,7 +17,7 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
         <Button
           variant="outline-success"
           className="m-2"
-          onClick={() => setIsSaveAllBtn(isSaveAllBtn + 1)}
+          onClick={() => {}}
           style={{ width: "5.5rem" }}
         >
           Start
