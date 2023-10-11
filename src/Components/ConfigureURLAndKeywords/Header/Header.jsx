@@ -5,8 +5,13 @@ import { Button } from "react-bootstrap";
 import { useAppContext } from "../../../AppContext";
 
 function Header({ showAllKeywordsFunction, editAllFunction }) {
-  const { isSaveAllBtn, setIsSaveAllBtn, isSelectAllBtn, setIsSelectAllBtn } =
-    useAppContext();
+  const {
+    isSaveAllBtn,
+    setIsSaveAllBtn,
+    isSelectAllBtn,
+    setIsSelectAllBtn,
+    setIsFromBtn,
+  } = useAppContext();
   return (
     <div className="d-flex justify-content-between flex-wrap mt-2 m-3">
       <div className="d-flex flex-wrap">
@@ -17,10 +22,16 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
         <Button
           variant="outline-success"
           className="m-2"
-          onClick={() => {}}
+          onClick={async () => {
+            setIsSaveAllBtn(isSaveAllBtn + 1);
+            setIsFromBtn("start");
+          }}
           style={{ width: "5.5rem" }}
         >
           Start
+        </Button>
+        <Button variant="outline-success" className="m-2" onClick={() => {}}>
+          Download
         </Button>
         <Button
           variant="outline-info"
@@ -53,7 +64,10 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
         <Button
           variant="outline-success"
           className="m-2"
-          onClick={() => setIsSaveAllBtn(isSaveAllBtn + 1)}
+          onClick={() => {
+            setIsSaveAllBtn(isSaveAllBtn + 1);
+            setIsFromBtn("saveAll");
+          }}
         >
           Save All
         </Button>
