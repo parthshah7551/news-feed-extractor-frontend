@@ -14,7 +14,8 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const [urlKeywordsData, setUrlKeywordsData] = useState({});
   const [isDataChange, setIsDataChange] = useState(false);
   const [editedData, setEditedData] = useState({});
-  const { isDataChanged, isSaveAllBtn, isSelectAllBtn } = useAppContext();
+  const { isDataChanged, isSaveAllBtn, isSelectAllBtn, isFromBtn } =
+    useAppContext();
   const [checkedURL, setCheckedURL] = useState([]);
 
   const urlKeywordsDataFunction = async () => {
@@ -53,7 +54,11 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   const saveAllDataFunction = async () => {
     try {
       await axios.put(`${BASEURL}/editURL`, editedData);
-      toast.success("Settings updated successfully!");
+      if (isFromBtn === "start") {
+        toast.success("Process has been started successfully!");
+      } else if (isFromBtn === "saveAll") {
+        toast.success("Settings updated successfully!");
+      }
     } catch (error) {
       console.log("error: ", error);
       toast.error("Something went wrong!");
@@ -77,7 +82,6 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       Object.keys(urlKeywordsData).forEach((item) => {
         urlKeywordsData[item].isChecked = true;
       });
-      console.log("urlKeywordsData: ", urlKeywordsData);
       setEditedData(urlKeywordsData);
     }
   }, [isSelectAllBtn]);
@@ -129,6 +133,12 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
           keywords: editedData[urlName]
             ? editedData[urlName].keywords
             : keywordsData[urlName].keywords,
+          fromDate: editedData[urlName]
+            ? editedData[urlName].fromDate
+            : keywordsData[urlName].fromDate,
+          toDate: editedData[urlName]
+            ? editedData[urlName].toDate
+            : keywordsData[urlName].toDate,
         },
       });
     } catch (error) {
@@ -154,6 +164,12 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
             ? editedData[urlName].isChecked
             : keywordsData[urlName].isChecked,
           keywords: updatedKeywords,
+          fromDate: editedData[urlName]
+            ? editedData[urlName].fromDate
+            : keywordsData[urlName].fromDate,
+          toDate: editedData[urlName]
+            ? editedData[urlName].toDate
+            : keywordsData[urlName].toDate,
         },
       });
     } catch (error) {
@@ -179,10 +195,66 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
     }
   };
 
+  const fromDateFunction = (urlName, keywordsData, fromDate) => {
+    try {
+      if (editedData[urlName]) {
+        setEditedData({
+          ...editedData,
+          [urlName]: {
+            isChecked: editedData[urlName]?.isChecked,
+            keywords: editedData[urlName]?.keywords,
+            fromDate,
+            toDate: editedData[urlName]?.toDate,
+          },
+        });
+      } else {
+        setEditedData({
+          ...editedData,
+          [urlName]: {
+            isChecked: keywordsData[urlName]?.isChecked,
+            keywords: keywordsData[urlName]?.keywords,
+            fromDate,
+            toDate: keywordsData[urlName]?.toDate,
+          },
+        });
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const toDateFunction = (urlName, keywordsData, toDate) => {
+    console.log("urlName: ", urlName);
+    try {
+      if (editedData[urlName]) {
+        setEditedData({
+          ...editedData,
+          [urlName]: {
+            isChecked: editedData[urlName]?.isChecked,
+            keywords: editedData[urlName]?.keywords,
+            fromDate: editedData[urlName]?.fromDate,
+            toDate,
+          },
+        });
+      } else {
+        setEditedData({
+          ...editedData,
+          [urlName]: {
+            isChecked: keywordsData[urlName]?.isChecked,
+            keywords: keywordsData[urlName]?.keywords,
+            fromDate: keywordsData[urlName]?.fromDate,
+            toDate,
+          },
+        });
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <Accordion className="m-3" activeKey={activeKey} alwaysOpen>
       {Object.keys(urlKeywordsData).map((urlItem, index) => {
-        console.log("checkedURL: ", checkedURL);
         return (
           <Accordion.Item eventKey={index} key={index}>
             <Accordion.Header onClick={() => openAccordionFunction(index)}>
@@ -215,10 +287,17 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
-                        defaultValue={moment().format("YYYY-MM-DD")}
+                        defaultValue={
+                          urlKeywordsData[urlItem]?.fromDate ||
+                          moment().format("YYYY-MM-DD")
+                        }
                         max={moment().format("YYYY-MM-DD")}
-                        onChange={(e) => {
-                          console.log(e.target.value);
+                        onChange={async (e) => {
+                          await fromDateFunction(
+                            urlItem,
+                            urlKeywordsData,
+                            e.target.value
+                          );
                         }}
                       />
                     </div>
@@ -226,13 +305,20 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                     <div>
                       <input
                         type="date"
-                        defaultValue={moment().format("YYYY-MM-DD")}
+                        defaultValue={
+                          urlKeywordsData[urlItem]?.toDate ||
+                          moment().format("YYYY-MM-DD")
+                        }
                         max={moment().format("YYYY-MM-DD")}
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
                         }}
-                        onChange={(e) => {
-                          console.log(e.target.value);
+                        onChange={async (e) => {
+                          await toDateFunction(
+                            urlItem,
+                            urlKeywordsData,
+                            e.target.value
+                          );
                         }}
                       />
                     </div>
