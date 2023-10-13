@@ -268,6 +268,8 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                       checked={checkedURL.includes(urlItem)}
                       onClick={async (e) => {
                         e.stopPropagation();
+                      }}
+                      onChange={(e) => {
                         editURLFunction(
                           urlItem,
                           urlKeywordsData,
@@ -328,7 +330,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                     <div>
                       <Button
                         variant="outline-success"
-                        className="ms-2"
+                        className="m-2"
                         onClick={async (e) => {
                           e.stopPropagation();
                           await onSaveButtonFunction(index, urlItem);
@@ -339,7 +341,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                       </Button>
                       <Button
                         variant="outline-danger"
-                        className="ms-2 me-4"
+                        className="m-2"
                         onClick={async (e) => {
                           e.stopPropagation();
                           if (window.confirm("Are you sure?")) {
