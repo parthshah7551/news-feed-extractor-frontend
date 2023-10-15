@@ -68,13 +68,15 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
 
   useEffect(() => {
     setActiveKey(
-      isShowAllKeywords > 0 ? accordianData.map((_, index) => index) : []
+      isShowAllKeywords > 0
+        ? Object.keys(urlKeywordsData).map((_, index) => index)
+        : []
     );
   }, [isShowAllKeywords]);
 
   useEffect(() => {
-    setActiveKey(accordianData.map((_, index) => index));
-    setEditArray(accordianData.map((_, index) => index));
+    setActiveKey(Object.keys(urlKeywordsData).map((_, index) => index));
+    setEditArray(Object.keys(urlKeywordsData).map((_, index) => index));
   }, [isEditAllToggle]);
 
   useEffect(() => {
