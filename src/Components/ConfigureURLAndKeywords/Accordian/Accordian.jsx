@@ -20,6 +20,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
 
   const urlKeywordsDataFunction = async () => {
     try {
+      console.log(`${BASEURL}/urlKeywordsDetails`)
       const urlKeywordsDetails = await axios.get(
         `${BASEURL}/urlKeywordsDetails`
       );
@@ -262,7 +263,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                 <div className="d-flex align-items-center">
                   <div className="form-check form-check-inline">
                     <input
-                      className="form-check-input"
+                      className="form-check-input site-url-checkbox"
                       type="checkbox"
                       id={`${index}`}
                       checked={checkedURL.includes(urlItem)}
@@ -279,12 +280,13 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                       }}
                     />
                   </div>
-                  <div>{urlItem}</div>
+                  <div className="site-url">{urlItem}</div>
                 </div>
                 <div className="d-flex">
                   <div className="d-flex justify-content-between align-items-center me-4">
                     <div className="ms-4">
                       <input
+                        className="from-date"
                         type="date"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -306,6 +308,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                     <span className="mx-3">To</span>
                     <div>
                       <input
+                      className="to-date"
                         type="date"
                         defaultValue={
                           urlKeywordsData[urlItem]?.toDate ||
