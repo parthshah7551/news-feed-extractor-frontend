@@ -227,7 +227,6 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   };
 
   const toDateFunction = (urlName, keywordsData, toDate) => {
-    console.log("urlName: ", urlName);
     try {
       if (editedData[urlName]) {
         setEditedData({
