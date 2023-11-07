@@ -12,11 +12,19 @@ function AddKeywordComponent() {
   const addKeywordFunction = async () => {
     try {
       const newKeyWordsData = {
-        [keywordText]: true,
+        [keywordText.trim()]: true,
       };
-      await axios.post(`${BASEURL}/addKeyword`, newKeyWordsData);
-      setKeywordText("");
-      setIsDataChanged(!isDataChanged);
+      const responseDetails = await axios.post(
+        `${BASEURL}/addKeyword`,
+        newKeyWordsData
+      );
+      if (responseDetails?.data.statusCode === 200) {
+        toast.success(responseDetails.data?.message);
+        setKeywordText("");
+        setIsDataChanged(!isDataChanged);
+      } else {
+        toast.error(responseDetails.data?.message);
+      }
     } catch (error) {
       console.log("error: ", error);
     }
@@ -24,7 +32,7 @@ function AddKeywordComponent() {
   const removeKeywordFunction = async () => {
     try {
       const response = await axios.delete(
-        `${BASEURL}/removeKeyword?deleteKeyword=${deleteKeywordText}`
+        `${BASEURL}/removeKeyword?deleteKeyword=${deleteKeywordText.trim()}`
       );
       if (response.data.statusCode === 200) {
         toast.success(response.data.message);
@@ -59,7 +67,6 @@ function AddKeywordComponent() {
           onClick={async (e) => {
             e.preventDefault();
             await addKeywordFunction();
-            toast.success("Keyword Added successfully!");
           }}
         >
           Add Keyword
