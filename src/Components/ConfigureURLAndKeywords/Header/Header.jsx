@@ -114,20 +114,20 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
       <div>
         <Button
           variant="outline-success"
-          className="m-2"
+          className="m-1"
           onClick={async () => {
             setIsSaveAllBtn(isSaveAllBtn + 1);
             setIsFromBtn("start");
             setIsLatestFileDownloaded(true);
             extractNews();
           }}
-          style={{ width: "5.5rem" }}
+          // style={{ width: "5.5rem" }}
         >
           Start
         </Button>
         <Button
           variant="outline-success"
-          className="m-2"
+          className="m-1"
           onClick={() => {
             getFileFunction();
           }}
@@ -136,35 +136,35 @@ function Header({ showAllKeywordsFunction, editAllFunction }) {
         </Button>
         <Button
           variant="outline-info"
-          className="m-2"
+          className="m-1"
           onClick={() => showAllKeywordsFunction(true)}
         >
           Show all keywords
         </Button>
         <Button
           variant="outline-secondary"
-          className=" m-2"
+          className=" m-1"
           onClick={() => showAllKeywordsFunction(false)}
         >
           Hide all keywords
         </Button>
         <Button
           variant="outline-primary"
-          className="m-2"
+          className="m-1"
           onClick={() => setIsSelectAllBtn(isSelectAllBtn + 1)}
         >
           Select All
         </Button>
         <Button
           variant="outline-primary"
-          className="m-2"
+          className="m-1"
           onClick={() => editAllFunction()}
         >
           Edit All
         </Button>
         <Button
           variant="outline-success"
-          className="m-2"
+          className="m-1"
           onClick={() => {
             setIsSaveAllBtn(isSaveAllBtn + 1);
             setIsFromBtn("saveAll");

@@ -42,10 +42,16 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
     }
   };
 
-  const onDeleteButtonFunction = async (url) => {
+  const onDeleteButtonFunction = async (url, index) => {
     try {
-      await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
-      setIsDataChange(!isDataChange);
+      const response = await axios.delete(`${BASEURL}/removeURL/?url=${url}`);
+      if (response.data.statusCode === 200) {
+        await removeIndexFromEditArray(index);
+        setIsDataChange(!isDataChange);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       toast.error("Something went wrong!");
       console.log("error: ", error);
@@ -108,6 +114,13 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
       setActiveKey([...activeKey]);
     } else {
       setActiveKey([...activeKey, index]);
+    }
+  };
+  const removeIndexFromEditArray = (index) => {
+    const elemIndex = editArray.indexOf(index);
+    if (elemIndex > -1) {
+      editArray.splice(elemIndex, 1);
+      setEditArray([...editArray]);
     }
   };
   const editButtonFunction = (index) => {
@@ -227,7 +240,6 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
   };
 
   const toDateFunction = (urlName, keywordsData, toDate) => {
-    console.log("urlName: ", urlName);
     try {
       if (editedData[urlName]) {
         setEditedData({
@@ -310,7 +322,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                     <span className="mx-3">To</span>
                     <div>
                       <input
-                      className="to-date"
+                        className="to-date"
                         type="date"
                         defaultValue={
                           urlKeywordsData[urlItem]?.toDate ||
@@ -350,8 +362,7 @@ function AccordionComponent({ isShowAllKeywords, isEditAllToggle }) {
                         onClick={async (e) => {
                           e.stopPropagation();
                           if (window.confirm("Are you sure?")) {
-                            await onDeleteButtonFunction(urlItem);
-                            toast.success("URL Deleted successfully!");
+                            await onDeleteButtonFunction(urlItem, index);
                           }
                         }}
                       >
